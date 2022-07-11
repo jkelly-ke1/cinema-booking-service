@@ -6,10 +6,13 @@ import com.cinemabooking.repositories.SeatRepository;
 import com.cinemabooking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class SeatService {
 
     private final SeatRepository seatRepository;
@@ -21,10 +24,16 @@ public class SeatService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void addSeat(Seat seat) {
         enrichSeat(seat);
         seatRepository.save(seat);
     }
+
+    public List<Seat> getAllSeats() {
+        return seatRepository.findAll();
+    }
+
 
     public void assignSeat(int id, User selectedUser) {
         seatRepository.findById(id).ifPresent(

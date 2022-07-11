@@ -5,10 +5,10 @@ import com.cinemabooking.models.Seat;
 import com.cinemabooking.services.SeatService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("")
@@ -27,6 +27,13 @@ public class SeatController {
     public void addSeat(@RequestBody SeatDto seatDto) {
         seatService.addSeat(convertFromSeatDto(seatDto));
     }
+
+    @GetMapping("/seats")
+    public List<SeatDto> getAllSeats() {
+        return seatService.getAllSeats().stream().map(this::convertToSeatDto)
+                .collect(Collectors.toList());
+    }
+
 
     private SeatDto convertToSeatDto(Seat seat) {
         return modelMapper.map(seat, SeatDto.class);
