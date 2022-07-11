@@ -3,7 +3,8 @@ package com.cinemabooking.models;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "Seat")
+@Entity
+@Table(name = "seat")
 public class Seat {
 
     @Id

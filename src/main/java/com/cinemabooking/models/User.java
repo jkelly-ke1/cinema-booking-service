@@ -1,8 +1,10 @@
 package com.cinemabooking.models;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Table(name = "User")
+@Entity
+@Table(name = "customer")
 public class User {
 
     @Id
@@ -12,10 +14,6 @@ public class User {
 
     @Column(name = "full_name")
     private String fullName;
-
-    @OneToMany
-    @JoinColumn(name = "seat_id", referencedColumnName = "id")
-    private Seat seat;
 
     public long getId() {
         return id;
@@ -33,11 +31,4 @@ public class User {
         this.fullName = fullName;
     }
 
-    public Seat getSeat() {
-        return seat;
-    }
-
-    public void setSeat(Seat seat) {
-        this.seat = seat;
-    }
 }
