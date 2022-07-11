@@ -35,6 +35,7 @@ public class SeatService {
     }
 
 
+    @Transactional
     public void assignSeat(int id, User selectedUser) {
         seatRepository.findById(id).ifPresent(
                 seat -> {
