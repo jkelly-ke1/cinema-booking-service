@@ -10,7 +10,7 @@ public class Seat {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     //TODO: add spring-side validation
     @Column(name = "row")
@@ -30,11 +30,11 @@ public class Seat {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expirationDate;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

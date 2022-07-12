@@ -34,13 +34,22 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
-
     @Transactional
     public void assignSeat(int id, User selectedUser) {
         seatRepository.findById(id).ifPresent(
                 seat -> {
                     seat.setUser(selectedUser);
                     seat.setExpirationDate(new Date());
+                }
+        );
+    }
+
+    @Transactional
+    public void releaseSeat(int id) {
+        seatRepository.findById(id).ifPresent(
+                seat -> {
+                    seat.setUser(null);
+                    seat.setExpirationDate(null);
                 }
         );
     }
