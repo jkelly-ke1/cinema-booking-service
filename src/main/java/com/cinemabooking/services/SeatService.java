@@ -30,6 +30,11 @@ public class SeatService {
         seatRepository.save(seat);
     }
 
+    @Transactional
+    public void makeBlankSeats(Seat seat) {
+        seatRepository.save(seat);
+    }
+
     public List<Seat> getAllSeats() {
         return seatRepository.findAll();
     }

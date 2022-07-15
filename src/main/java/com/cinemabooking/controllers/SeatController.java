@@ -33,6 +33,12 @@ public class SeatController {
         seatService.addSeat(convertFromSeatDto(seatDto));
     }
 
+    // cinema session should be created with client-side parameters
+    @PostMapping("/seat/new-session")
+    public void createBlankCinemaSession(@RequestBody SeatDto seatDto) {
+        seatService.makeBlankSeats(convertFromSeatDto(seatDto));
+    }
+
     @GetMapping("/seat/find-all")
     public List<SeatDto> getAllSeats() {
         return seatService.getAllSeats().stream().map(this::convertToSeatDto)
@@ -45,7 +51,7 @@ public class SeatController {
         Seat patchedSeat = convertFromSeatDto(seatDto);
         User assignedUser = userService.findUserByName(patchedSeat.getUser().getFullName());
         seatService.assignSeat(id, assignedUser);
-        return ResponseEntity.ok("Seat was reserved!");
+        return ResponseEntity.ok("Seat by id: " + id + " was reserved!");
     }
 
     @PatchMapping("/seat/{id}/release")
