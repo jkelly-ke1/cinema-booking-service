@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,9 +50,21 @@ public class SeatController {
     public ResponseEntity<?> reserveSeat(@RequestBody SeatDto seatDto,
                                          @PathVariable("id") int id) {
         Seat patchedSeat = convertFromSeatDto(seatDto);
-        User assignedUser = userService.findUserByName(patchedSeat.getUser().getFullName());
-        seatService.assignSeat(id, assignedUser);
+
+        // was created only for Seat check
+        // need to rework ASAP
+        Optional<Seat> oldSeat = seatService.getSeatById(id);
+        Seat checkOldSeat = oldSeat.get();
+
+        if (checkOldSeat.getUser().getFullName() == null) {
+            User assignedUser = userService.findUserByName(patchedSeat.getUser().getFullName());
+            seatService.assignSeat(id, assignedUser);
+        } else {
+            return ResponseEntity.ok("Seat by id: " + id + " is already reserved.");
+        }
+
         return ResponseEntity.ok("Seat by id: " + id + " was reserved!");
+
     }
 
     @PatchMapping("/seat/{id}/release")

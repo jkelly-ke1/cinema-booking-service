@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,6 +40,10 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
+    public Optional<Seat> getSeatById(int id) {
+        return seatRepository.findById(id);
+    }
+
     @Transactional
     public void assignSeat(int id, User selectedUser) {
         seatRepository.findById(id).ifPresent(
@@ -60,6 +65,8 @@ public class SeatService {
     }
 
     private void enrichSeat(Seat seat) {
+        //TODO: expiration date should be assigned by user query
+        // or already should be assigned when blank seat was created
         seat.setExpirationDate(new Date());
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
     }

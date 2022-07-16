@@ -28,6 +28,7 @@ public class UserController {
         userService.addUser(convertFromUserDto(userDto));
     }
 
+    // remove before push next time 
     @PostMapping("/bare-user")
     public void addBareUser(@RequestBody User user) {
         userService.addUser(user);
