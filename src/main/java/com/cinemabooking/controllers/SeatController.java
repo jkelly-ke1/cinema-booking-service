@@ -1,6 +1,7 @@
 package com.cinemabooking.controllers;
 
 import com.cinemabooking.dto.SeatDto;
+import com.cinemabooking.dto.UserDto;
 import com.cinemabooking.models.Seat;
 import com.cinemabooking.models.User;
 import com.cinemabooking.services.SeatService;
@@ -49,21 +50,15 @@ public class SeatController {
     @PatchMapping("/seat/{id}/reserve")
     public ResponseEntity<?> reserveSeat(@RequestBody SeatDto seatDto,
                                          @PathVariable("id") int id) {
-        Seat patchedSeat = convertFromSeatDto(seatDto);
 
-        // was created only for Seat check
-        // need to rework ASAP
-        Optional<Seat> oldSeat = seatService.getSeatById(id);
-        Seat checkOldSeat = oldSeat.get();
-
-        if (checkOldSeat.getUser().getFullName() == null) {
-            User assignedUser = userService.findUserByName(patchedSeat.getUser().getFullName());
-            seatService.assignSeat(id, assignedUser);
-        } else {
+        if(seatService.getSeatById(id).get().getUser().getFullName() != null) {
             return ResponseEntity.ok("Seat by id: " + id + " is already reserved.");
         }
 
-        return ResponseEntity.ok("Seat by id: " + id + " was reserved!");
+        User assignedUser = new User();
+        assignedUser.setFullName(seatDto.getUser().getFullName());
+        seatService.assignSeat(id, assignedUser);
+        return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
 
     }
 

@@ -46,6 +46,12 @@ public class SeatService {
 
     @Transactional
     public void assignSeat(int id, User selectedUser) {
+
+        if (userRepository.getUserByFullName(selectedUser.getFullName()) == null) {
+            userRepository.save(selectedUser);
+            System.out.println("User not found. Creating new user with name: " + selectedUser.getFullName());
+        }
+
         seatRepository.findById(id).ifPresent(
                 seat -> {
                     seat.setUser(selectedUser);
@@ -65,9 +71,18 @@ public class SeatService {
     }
 
     private void enrichSeat(Seat seat) {
-        //TODO: expiration date should be assigned by user query
-        // or already should be assigned when blank seat was created
+        // expiration date should be assigned by user query
+        // or already be assigned when blank seat was created
         seat.setExpirationDate(new Date());
+
+        if (userRepository.getUserByFullName(seat.getUser().getFullName()) == null) {
+            userRepository.save(seat.getUser());
+            System.out.println("Cannot find user with name: "
+                    + userRepository.getUserByFullName(seat.getUser().getFullName())
+                    + "Creating new...");
+            seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
+        }
+
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
     }
 

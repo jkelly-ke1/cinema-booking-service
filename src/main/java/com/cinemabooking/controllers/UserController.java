@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("user/")
 public class UserController {
@@ -23,13 +25,13 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/add-user")
-    public void addUser(@RequestBody UserDto userDto) {
+    @PostMapping("/add")
+    public void addUser(@RequestBody @Valid UserDto userDto) {
         userService.addUser(convertFromUserDto(userDto));
     }
 
     // remove before push next time 
-    @PostMapping("/bare-user")
+    @PostMapping("/add-bare")
     public void addBareUser(@RequestBody User user) {
         userService.addUser(user);
     }
