@@ -51,15 +51,13 @@ public class SeatController {
     public ResponseEntity<?> reserveSeat(@RequestBody SeatDto seatDto,
                                          @PathVariable("id") int id) {
 
-        if(seatService.getSeatById(id).get().getUser().getFullName() != null) {
+        if(seatService.getSeatById(id).get().getUser() != null) {
             return ResponseEntity.ok("Seat by id: " + id + " is already reserved.");
         }
-
-        User assignedUser = new User();
-        assignedUser.setFullName(seatDto.getUser().getFullName());
-        seatService.assignSeat(id, assignedUser);
-        return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
-
+            User assignedUser = new User();
+            assignedUser.setFullName(seatDto.getUser().getFullName());
+            seatService.assignSeat(id, assignedUser);
+            return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
     }
 
     @PatchMapping("/seat/{id}/release")
