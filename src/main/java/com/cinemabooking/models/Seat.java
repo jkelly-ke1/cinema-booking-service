@@ -1,5 +1,7 @@
 package com.cinemabooking.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -22,12 +24,13 @@ public class Seat {
     @Column(name = "hall_number")
     private int hallNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "expiration_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date expirationDate;
 
     public int getId() {
@@ -76,5 +79,17 @@ public class Seat {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Seat{" +
+                "id=" + id +
+                ", row=" + row +
+                ", place=" + place +
+                ", hallNumber=" + hallNumber +
+                ", user=" + user +
+                ", expirationDate=" + expirationDate +
+                '}';
     }
 }

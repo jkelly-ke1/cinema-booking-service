@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,7 @@ public class UserService {
 
     @Transactional
     public void addUser(User user) {
+        enrichUser(user);
         userRepository.save(user);
     }
 
@@ -32,5 +34,8 @@ public class UserService {
         return userRepository.getUserByFullName(fullName);
     }
 
+    private void enrichUser(User user) {
+        user.setRegisteredAt(new Date());
+    }
 
 }

@@ -1,10 +1,13 @@
 package com.cinemabooking.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "customer")
@@ -22,6 +25,11 @@ public class User {
     @Size(min = 6, max = 40, message = "Name must contain 6 to 40 characters.")
     private String fullName;
 
+    @Column(name = "registered_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+    private Date registeredAt;
+
     public long getId() {
         return id;
     }
@@ -38,4 +46,20 @@ public class User {
         this.fullName = fullName;
     }
 
+    public Date getRegisteredAt() {
+        return registeredAt;
+    }
+
+    public void setRegisteredAt(Date registeredAt) {
+        this.registeredAt = registeredAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", registeredAt=" + registeredAt +
+                '}';
+    }
 }

@@ -44,20 +44,23 @@ public class SeatService {
         return seatRepository.findById(id);
     }
 
+    // This method assign seat to user. If user is not presented
+    // in user's database, will be created new.
+    // Not the best implementation, but works.
     @Transactional
     public void assignSeat(int id, User selectedUser) {
 
         if (userRepository.getUserByFullName(selectedUser.getFullName()) == null) {
+            selectedUser.setRegisteredAt(new Date());
             userRepository.save(selectedUser);
-            System.out.println("User not found. Creating new user with name: " + selectedUser.getFullName());
-        }
+            mapSeat(id, userRepository.getUserByFullName(selectedUser.getFullName()));
 
-        seatRepository.findById(id).ifPresent(
-                seat -> {
-                    seat.setUser(selectedUser);
-                    seat.setExpirationDate(new Date());
-                }
-        );
+            System.out.println("User not found. Creating new user with name: " + selectedUser.getFullName());
+
+        } else if (userRepository.getUserByFullName(selectedUser.getFullName()) != null) {
+            mapSeat(id, userRepository.getUserByFullName(selectedUser.getFullName()));
+            System.out.println("Registered user is found.");
+        }
     }
 
     @Transactional
@@ -70,9 +73,9 @@ public class SeatService {
         );
     }
 
+    // expiration date should be assigned by user query
+    // or already be assigned during the seat creation
     private void enrichSeat(Seat seat) {
-        // expiration date should be assigned by user query
-        // or already be assigned when blank seat was created
         seat.setExpirationDate(new Date());
 
         if (userRepository.getUserByFullName(seat.getUser().getFullName()) == null) {
@@ -84,6 +87,16 @@ public class SeatService {
         }
 
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
+    }
+
+
+    private void mapSeat(int id, User user) {
+        seatRepository.findById(id).ifPresent(
+                seat -> {
+                    seat.setUser(user);
+                    seat.setExpirationDate(new Date());
+                }
+        );
     }
 
 }
