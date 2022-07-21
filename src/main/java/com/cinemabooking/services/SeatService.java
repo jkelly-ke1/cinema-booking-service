@@ -40,6 +40,10 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
+    public List<Seat> getSeatsByDate(Date start, Date end) {
+        return seatRepository.findAllByExpirationDateBetween(start, end);
+    }
+
     public Optional<Seat> getSeatById(int id) {
         return seatRepository.findById(id);
     }

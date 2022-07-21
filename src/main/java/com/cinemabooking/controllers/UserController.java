@@ -5,12 +5,11 @@ import com.cinemabooking.models.User;
 import com.cinemabooking.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("user/")
@@ -26,8 +25,29 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public void addUser(@RequestBody @Valid UserDto userDto) {
+    public void addUser(@Valid @RequestBody UserDto userDto) {
         userService.addUser(convertFromUserDto(userDto));
+    }
+
+    @GetMapping("/get")
+    public List<User> getAllUsers() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/get/{id}")
+    public User getUserById(@PathVariable long id) {
+        return userService.getUserById(id).get();
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
+        userService.updateUser(id, convertFromUserDto(userDto));
+        return ResponseEntity.ok("User by id " + id + " was updated.");
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteUserById(@PathVariable long id) {
+        userService.deleteUser(id);
     }
 
     // remove before push next time 

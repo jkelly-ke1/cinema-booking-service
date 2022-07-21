@@ -30,7 +30,6 @@ public class Seat {
 
     @Column(name = "expiration_date")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date expirationDate;
 
     public int getId() {
