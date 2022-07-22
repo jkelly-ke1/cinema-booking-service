@@ -18,12 +18,14 @@ public class UserValidator implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return User.class.equals(clazz);
+    public boolean supports(Class<?> aClass) {
+        return User.class.equals(aClass);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
-        User user = (User) target;
+    public void validate(Object o, Errors errors) {
+        User user = (User) o;
+
+
     }
 }

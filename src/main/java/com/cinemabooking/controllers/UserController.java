@@ -3,9 +3,12 @@ package com.cinemabooking.controllers;
 import com.cinemabooking.dto.UserDto;
 import com.cinemabooking.models.User;
 import com.cinemabooking.services.UserService;
+import com.cinemabooking.util.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,16 +20,24 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final UserValidator userValidator;
+
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService, ModelMapper modelMapper, UserValidator userValidator) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.userValidator = userValidator;
     }
 
     @PostMapping("/add")
-    public void addUser(@Valid @RequestBody UserDto userDto) {
-        userService.addUser(convertFromUserDto(userDto));
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto,
+                                     BindingResult bindingResult) {
+        User userToAdd = convertFromUserDto(userDto);
+        userValidator.validate(userToAdd, bindingResult);
+        userService.addUser(userToAdd);
+
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/get")
@@ -40,7 +51,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody @Valid UserDto userDto) {
         userService.updateUser(id, convertFromUserDto(userDto));
         return ResponseEntity.ok("User by id " + id + " was updated.");
     }
@@ -59,7 +70,6 @@ public class UserController {
     private User convertFromUserDto(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }
-
 
 
 }

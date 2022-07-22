@@ -3,15 +3,14 @@ package com.cinemabooking.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "customer")
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -21,7 +20,7 @@ public class User {
     @Column(name = "full_name")
     @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+",
             message = "Name should be in this format: 'Name Surname'")
-    @NotEmpty(message = "Cannot be empty.")
+    @NotBlank(message = "Cannot be blank!")
     @Size(min = 6, max = 40, message = "Name must contain 6 to 40 characters.")
     private String fullName;
 
