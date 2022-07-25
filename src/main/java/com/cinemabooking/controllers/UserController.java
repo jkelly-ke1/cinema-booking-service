@@ -3,6 +3,8 @@ package com.cinemabooking.controllers;
 import com.cinemabooking.dto.UserDto;
 import com.cinemabooking.models.User;
 import com.cinemabooking.services.UserService;
+import com.cinemabooking.util.UserErrorResponse;
+import com.cinemabooking.util.UserNotFoundException;
 import com.cinemabooking.util.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,7 @@ public class UserController {
 
     @GetMapping("/get/{id}")
     public User getUserById(@PathVariable long id) {
-        return userService.getUserById(id).get();
+        return userService.getUserById(id);
     }
 
     @PatchMapping("/update/{id}")
@@ -69,6 +71,16 @@ public class UserController {
 
     private User convertFromUserDto(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handlerException(UserNotFoundException e) {
+        UserErrorResponse response = new UserErrorResponse(
+                "User with this id was not found.",
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
 

@@ -2,6 +2,7 @@ package com.cinemabooking.services;
 
 import com.cinemabooking.models.User;
 import com.cinemabooking.repositories.UserRepository;
+import com.cinemabooking.util.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +32,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(long id) {
-        return userRepository.getUserById(id);
+    public User getUserById(long id) {
+        Optional<User> foundUser = userRepository.getUserById(id);
+        return foundUser.orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByName(String fullName) {
