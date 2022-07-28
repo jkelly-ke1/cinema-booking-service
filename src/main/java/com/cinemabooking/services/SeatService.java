@@ -44,6 +44,11 @@ public class SeatService {
         return seatRepository.findAllByExpirationDateBetween(start, end);
     }
 
+    public List<Seat> getSeatsByHallNumber(int hallNumber) {
+        return seatRepository.findAllByHallNumber(hallNumber);
+    }
+
+
     public Optional<Seat> getSeatById(int id) {
         return seatRepository.findById(id);
     }

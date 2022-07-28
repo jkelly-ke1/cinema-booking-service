@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
     List<Seat> findAllByExpirationDateBetween(Date startDate, Date endDate);
+    List<Seat> findAllByHallNumber(int hallNumber);
 }

@@ -30,4 +30,12 @@ public class DateDto {
     public void setEnd(Date end) {
         this.end = end;
     }
+
+    @Override
+    public String toString() {
+        return "DateDto{" +
+                "start=" + start +
+                ", end=" + end +
+                '}';
+    }
 }

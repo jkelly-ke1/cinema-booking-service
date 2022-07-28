@@ -8,15 +8,17 @@ import com.cinemabooking.services.SeatService;
 import com.cinemabooking.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/seat")
 public class SeatController {
 
     private final SeatService seatService;
@@ -30,24 +32,25 @@ public class SeatController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/seat/add")
+    @PostMapping("/add")
     public void addSeat(@RequestBody SeatDto seatDto) {
         seatService.addSeat(convertFromSeatDto(seatDto));
     }
 
     // cinema session should be created with client-side parameters
     //todo: redo user dto
-    @PostMapping("/seat/new-session")
+    @PostMapping("/new-session")
     public void createBlankCinemaSession(@RequestBody SeatDto seatDto) {
         seatService.makeBlankSeats(convertFromSeatDto(seatDto));
     }
 
-    @GetMapping("/seat/find-all-bare")
+    // return unwrapped seat objects
+    @GetMapping("/find-all-bare")
     public List<Seat> getAllBareSeats() {
         return seatService.getAllSeats();
     }
 
-    @GetMapping("/seat/find-all")
+    @GetMapping("/find-all")
     public List<SeatDto> getAllSeats() {
         return seatService.getAllSeats().stream().map(this::convertToSeatDto)
                 .collect(Collectors.toList());
@@ -55,7 +58,7 @@ public class SeatController {
 
     // dont work for now
     // todo: make it work
-    @GetMapping("/seat/find-by-date")
+    @GetMapping("/find-by-date")
     public List<Seat> getSeatsByDate(@RequestBody DateDto dateDto) {
 
         Date first = dateDto.getStart();
@@ -67,20 +70,33 @@ public class SeatController {
         return seatService.getSeatsByDate(first, second);
     }
 
-    @PatchMapping("/seat/{id}/reserve")
+    @GetMapping("/find-by-hall/{hallNumber}")
+    public ResponseEntity<?> getSeatsByHall(@PathVariable int hallNumber) {
+
+        if (seatService.getSeatsByHallNumber(hallNumber).isEmpty()) {
+            return new ResponseEntity<>("Hall by number " + hallNumber + " was not found.",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(seatService.getSeatsByHallNumber(hallNumber));
+    }
+
+    @PatchMapping("/{id}/reserve")
     public ResponseEntity<?> reserveSeat(@RequestBody SeatDto seatDto,
                                          @PathVariable("id") int id) {
 
-        if(seatService.getSeatById(id).get().getUser() != null) {
+        if (seatService.getSeatById(id).get().getUser() != null) {
             return ResponseEntity.ok("Seat by id: " + id + " is already reserved.");
         }
-            User assignedUser = new User();
-            assignedUser.setFullName(seatDto.getUser().getFullName());
-            seatService.assignSeat(id, assignedUser);
-            return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
+
+        User assignedUser = new User();
+        assignedUser.setFullName(seatDto.getUser().getFullName());
+        seatService.assignSeat(id, assignedUser);
+        return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
+
     }
 
-    @PatchMapping("/seat/{id}/release")
+    @PatchMapping("/{id}/release")
     public ResponseEntity<?> releaseSeat(@PathVariable("id") int id) {
         seatService.releaseSeat(id);
         return ResponseEntity.ok("Seat by id: " + id + " was released.");
