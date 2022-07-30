@@ -1,6 +1,7 @@
 package com.cinemabooking.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -15,18 +16,21 @@ public class Employee {
     private int id;
 
     @Column(name = "username")
+    @NotNull
     private String username;
 
     @Column(name = "password")
+    @NotNull
     private String password;
+
 
     //TODO: add registration date
 //    @Column(name = "registration_date")
 //    @Temporal(TemporalType.TIMESTAMP)
 //    private Date registeredAt;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    private Set<Role> roles;
+    @Column(name = "role")
+    private String role;
 
 
     public Employee() {}
@@ -53,5 +57,13 @@ public class Employee {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

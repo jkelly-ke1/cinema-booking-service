@@ -2,9 +2,11 @@ package com.cinemabooking.security;
 
 import com.cinemabooking.models.Employee;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class EmployeeDetails implements UserDetails {
 
@@ -14,13 +16,9 @@ public class EmployeeDetails implements UserDetails {
         this.employee = employee;
     }
 
-    public Employee getEmployee() {
-        return this.employee;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(employee.getRole()));
     }
 
     @Override
@@ -51,5 +49,9 @@ public class EmployeeDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Employee getEmployee() {
+        return this.employee;
     }
 }
