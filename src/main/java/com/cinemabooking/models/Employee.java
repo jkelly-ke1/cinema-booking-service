@@ -23,17 +23,16 @@ public class Employee {
     @NotNull
     private String password;
 
-
     //TODO: add registration date
 //    @Column(name = "registration_date")
 //    @Temporal(TemporalType.TIMESTAMP)
 //    private Date registeredAt;
 
-    @Column(name = "role")
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
-
-    public Employee() {}
+    public Employee() {
+    }
 
     public int getId() {
         return id;
@@ -59,11 +58,21 @@ public class Employee {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

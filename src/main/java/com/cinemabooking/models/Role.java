@@ -6,9 +6,9 @@ import javax.persistence.*;
 import java.util.Set;
 
 //TODO: add roles
-//@Entity
-//@Table(name = "role")
-public class Role {
+@Entity
+@Table(name = "role")
+public class Role implements GrantedAuthority{
 
     @Id
     private int id;
@@ -55,8 +55,22 @@ public class Role {
         this.employees = employees;
     }
 
+    @Override
+    public String getAuthority() {
+        return getName();
+    }
+
 //    @Override
 //    public String getAuthority() {
 //        return getName();
+//    }
+
+//    @Override
+//    public String toString() {
+//        return "Role{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", employees=" + employees +
+//                '}';
 //    }
 }

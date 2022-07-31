@@ -22,12 +22,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.employeeService = employeeService;
     }
 
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     //test auth configuration
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests().antMatchers("/seat").hasRole("EMPLOYEE")
-                .and()
-                .authorizeRequests().antMatchers("/auth/**", "/user/**").permitAll()
+        http.authorizeRequests()
+                .antMatchers("/user/**").hasRole("ADMIN")
+                .antMatchers("/auth/signup").permitAll()
+                .anyRequest().hasAnyRole("EMPLOYEE", "ADMIN")
                 .and()
                 .httpBasic();
 
@@ -36,13 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(employeeService);
-    }
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        auth.userDetailsService(employeeService).passwordEncoder(getPasswordEncoder());
     }
 
 }

@@ -22,7 +22,7 @@ public class SecurityService {
     @Transactional
     public void registerEmployee(Employee employee) {
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-        employee.setRole("ROLE_EMPLOYEE");
+//        employee.setRoles("ROLE_EMPLOYEE");
         employeeRepository.save(employee);
     }
 
