@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,13 +23,11 @@ import java.util.stream.Collectors;
 public class SeatController {
 
     private final SeatService seatService;
-    private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SeatController(SeatService seatService, UserService userService, ModelMapper modelMapper) {
+    public SeatController(SeatService seatService, ModelMapper modelMapper) {
         this.seatService = seatService;
-        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -56,18 +55,13 @@ public class SeatController {
                 .collect(Collectors.toList());
     }
 
-    // dont work for now
-    // todo: make it work
+
     @GetMapping("/find-by-date")
-    public List<Seat> getSeatsByDate(@RequestBody DateDto dateDto) {
+    public List<Seat> getSeatsByLocalDateTime(@RequestBody DateDto dateDto) {
+        var first = dateDto.getStart();
+        var second = dateDto.getEnd();
 
-        Date first = dateDto.getStart();
-        Date second = dateDto.getEnd();
-        System.out.println(first);
-        System.out.println(second);
-
-        System.out.println(seatService.getSeatsByDate(dateDto.getStart(), dateDto.getEnd()));
-        return seatService.getSeatsByDate(first, second);
+        return seatService.getSeatsByLocalDateTime(first, second);
     }
 
     @GetMapping("/find-by-hall/{hallNumber}")

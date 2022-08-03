@@ -1,33 +1,35 @@
 package com.cinemabooking.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class DateDto {
 
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Date start;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
+    private LocalDateTime start;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Date end;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
+    private LocalDateTime end;
 
-
-    public Date getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 

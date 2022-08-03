@@ -1,6 +1,9 @@
 package com.cinemabooking.dto;
 
 import com.cinemabooking.models.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 
 public class SeatDto {
 
@@ -9,6 +12,8 @@ public class SeatDto {
     private int place;
 
     private int hallNumber;
+
+    private LocalDateTime sessionTime;
 
     private UserDto user;
 
@@ -34,6 +39,14 @@ public class SeatDto {
 
     public void setHallNumber(int hallNumber) {
         this.hallNumber = hallNumber;
+    }
+
+    public LocalDateTime getSessionTime() {
+        return sessionTime;
+    }
+
+    public void setSessionTime(LocalDateTime sessionTime) {
+        this.sessionTime = sessionTime;
     }
 
     public UserDto getUser() {

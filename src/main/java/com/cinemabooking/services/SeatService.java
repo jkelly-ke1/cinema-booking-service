@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +42,8 @@ public class SeatService {
         return seatRepository.findAll();
     }
 
-    public List<Seat> getSeatsByDate(Date start, Date end) {
-        return seatRepository.findAllByExpirationDateBetween(start, end);
+    public List<Seat> getSeatsByLocalDateTime(LocalDateTime start, LocalDateTime end) {
+        return seatRepository.findAllBySessionTimeBetween(start, end);
     }
 
     public List<Seat> getSeatsByHallNumber(int hallNumber) {
@@ -97,7 +99,6 @@ public class SeatService {
 
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
     }
-
 
     private void mapSeat(int id, User user) {
         seatRepository.findById(id).ifPresent(

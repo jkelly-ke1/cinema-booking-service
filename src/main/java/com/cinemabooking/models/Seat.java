@@ -3,6 +3,7 @@ package com.cinemabooking.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,9 +29,12 @@ public class Seat {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @Column(name = "expiration_date")
+    @Column(name = "assign_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date expirationDate;
+
+    @Column(name = "session_time")
+    private LocalDateTime sessionTime;
 
     public int getId() {
         return id;
@@ -78,6 +82,14 @@ public class Seat {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public LocalDateTime getSessionTime() {
+        return sessionTime;
+    }
+
+    public void setSessionTime(LocalDateTime sessionTime) {
+        this.sessionTime = sessionTime;
     }
 
     @Override
