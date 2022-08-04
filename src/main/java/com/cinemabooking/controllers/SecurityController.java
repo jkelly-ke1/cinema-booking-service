@@ -5,12 +5,10 @@ import com.cinemabooking.models.Employee;
 import com.cinemabooking.services.SecurityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
-//TODO
+
 @RestController
 @RequestMapping("/auth")
 public class SecurityController {
@@ -27,6 +25,11 @@ public class SecurityController {
     public ResponseEntity<?> registerNewEmployee(@RequestBody EmployeeDto employeeDto) {
         securityService.registerEmployee(convertFromEmployeeDto(employeeDto));
         return ResponseEntity.ok("New employee was registered!");
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<?> loginEmployee(@AuthenticationPrincipal EmployeeDto employeeDto) {
+        return ResponseEntity.ok("Login success!");
     }
 
     private Employee convertFromEmployeeDto(EmployeeDto employeeDto) {
