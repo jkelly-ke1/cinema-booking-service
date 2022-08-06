@@ -36,6 +36,14 @@ public class EmployeeService implements UserDetailsService {
         return employeeRepository.findById(id);
     }
 
+    public void saveEmployee(Employee employee) {
+        employeeRepository.save(employee);
+    }
+
+    @Transactional
+    public void deleteEmployee(int id) {
+        employeeRepository.deleteEmployeeById(id);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -45,5 +53,5 @@ public class EmployeeService implements UserDetailsService {
             throw new UsernameNotFoundException("User was not found!");
 
         return new EmployeeDetails(employee.get());
-     }
+    }
 }

@@ -1,5 +1,7 @@
 package com.cinemabooking.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -17,6 +19,7 @@ public class Role implements GrantedAuthority{
 
     @Transient
     @ManyToMany(mappedBy = "roles")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Employee> employees;
 
     public Role() {
