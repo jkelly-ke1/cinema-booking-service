@@ -48,7 +48,7 @@ public class AdminController {
         return ResponseEntity.ok("New employee was created.");
     }
 
-    @DeleteMapping("/employee/delete/{id}")
+    @DeleteMapping("/employee/{id}/delete")
     public ResponseEntity<?> deleteEmployee(@PathVariable("id") int id) {
         if (employeeService.getEmployeeById(id).isEmpty()) {
             return new ResponseEntity<>("User by id " + id + " is not found.",
@@ -58,7 +58,7 @@ public class AdminController {
         return ResponseEntity.ok("User was deleted.");
     }
 
-    @PatchMapping("/employee/edit/{id}")
+    @PatchMapping("/employee/{id}/edit")
     public ResponseEntity<?> editEmployee(@PathVariable("id") int id,
                                           @RequestBody EmployeeDto employeeDto) {
         if (employeeService.getEmployeeById(id).isEmpty()) {
@@ -66,7 +66,7 @@ public class AdminController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        securityService.registerEmployee(convertFromEmployeeDto(employeeDto));
+        securityService.updateEmployee(convertFromEmployeeDto(employeeDto), id);
         return ResponseEntity.ok("Employee was edited.");
 
     }
