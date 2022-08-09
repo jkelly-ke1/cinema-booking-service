@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -20,10 +21,12 @@ public class Employee {
 
     @Column(name = "username")
     @NotNull
+    @Size(min = 4, max = 30, message = "Username must contain from 4 to 30 characters.")
     private String username;
 
     @Column(name = "password")
     @NotNull
+    @Size(min = 5, max = 30, message = "Password must contain from 5 to 30 characters.")
     private String password;
 
     //TODO: add registration date

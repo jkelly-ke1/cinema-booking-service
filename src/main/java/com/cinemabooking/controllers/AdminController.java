@@ -4,12 +4,17 @@ import com.cinemabooking.dto.EmployeeDto;
 import com.cinemabooking.models.Employee;
 import com.cinemabooking.services.EmployeeService;
 import com.cinemabooking.services.SecurityService;
+import com.cinemabooking.util.EmployeeErrorResponse;
+import com.cinemabooking.util.EmployeeNotFoundException;
+import com.cinemabooking.util.EmployeeValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,12 +23,17 @@ public class AdminController {
 
     private final EmployeeService employeeService;
     private final SecurityService securityService;
+    private final EmployeeValidator employeeValidator;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public AdminController(EmployeeService employeeService, SecurityService securityService, ModelMapper modelMapper) {
+    public AdminController(EmployeeService employeeService,
+                           SecurityService securityService,
+                           EmployeeValidator employeeValidator,
+                           ModelMapper modelMapper) {
         this.employeeService = employeeService;
         this.securityService = securityService;
+        this.employeeValidator = employeeValidator;
         this.modelMapper = modelMapper;
     }
 
@@ -43,8 +53,17 @@ public class AdminController {
     }
 
     @PostMapping("/employee/add")
-    public ResponseEntity<?> createEmployee(@RequestBody EmployeeDto employeeDto) {
-        securityService.registerEmployee(convertFromEmployeeDto(employeeDto));
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDto employeeDto,
+                                            BindingResult bindingResult) {
+        Employee employeeToCreate = convertFromEmployeeDto(employeeDto);
+        employeeValidator.validate(employeeToCreate, bindingResult);
+
+        if (!bindingResult.hasErrors()) {
+            return new ResponseEntity<>("Validation error.",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        securityService.registerEmployee(employeeToCreate);
         return ResponseEntity.ok("New employee was created.");
     }
 
@@ -70,6 +89,17 @@ public class AdminController {
         return ResponseEntity.ok("Employee was edited.");
 
     }
+
+    @ExceptionHandler
+    private ResponseEntity<EmployeeErrorResponse> handlerExceptions(EmployeeNotFoundException e) {
+        EmployeeErrorResponse response = new EmployeeErrorResponse(
+                "Employee by this id not exist.",
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 
     private Employee convertFromEmployeeDto(EmployeeDto employeeDto) {
         return modelMapper.map(employeeDto, Employee.class);

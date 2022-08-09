@@ -21,25 +21,26 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
     private final UserValidator userValidator;
-
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper, UserValidator userValidator) {
+    public UserController(UserService userService,
+                          ModelMapper modelMapper,
+                          UserValidator userValidator) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.userValidator = userValidator;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto,
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto,
                                      BindingResult bindingResult) {
         User userToAdd = convertFromUserDto(userDto);
         userValidator.validate(userToAdd, bindingResult);
         userService.addUser(userToAdd);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok("New user was created.");
     }
 
     @GetMapping("/get")
@@ -82,6 +83,5 @@ public class UserController {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-
 
 }
