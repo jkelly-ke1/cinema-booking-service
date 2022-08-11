@@ -26,9 +26,5 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-//        if (userService.getUserById(user.getId())) {
-//            errors.rejectValue("id", "User by this id is not present.");
-//        }
-
     }
 }

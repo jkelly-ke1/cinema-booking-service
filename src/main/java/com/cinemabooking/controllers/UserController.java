@@ -64,12 +64,6 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    // remove before push next time 
-    @PostMapping("/add-bare")
-    public void addBareUser(@RequestBody User user) {
-        userService.addUser(user);
-    }
-
     private User convertFromUserDto(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }

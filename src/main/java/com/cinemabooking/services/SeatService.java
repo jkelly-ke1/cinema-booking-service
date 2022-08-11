@@ -4,6 +4,8 @@ import com.cinemabooking.models.Seat;
 import com.cinemabooking.models.User;
 import com.cinemabooking.repositories.SeatRepository;
 import com.cinemabooking.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ public class SeatService {
         this.seatRepository = seatRepository;
         this.userRepository = userRepository;
     }
+
+    Logger logger = LoggerFactory.getLogger(SeatService.class);
 
     @Transactional
     public void addSeat(Seat seat) {
@@ -61,15 +65,13 @@ public class SeatService {
     public void assignSeat(int id, User selectedUser) {
 
         if (userRepository.getUserByFullName(selectedUser.getFullName()) == null) {
+            logger.warn("User not found. Creating new user with name: " + selectedUser.getFullName());
             selectedUser.setRegisteredAt(new Date());
             userRepository.save(selectedUser);
             mapSeat(id, userRepository.getUserByFullName(selectedUser.getFullName()));
 
-            System.out.println("User not found. Creating new user with name: " + selectedUser.getFullName());
-
         } else if (userRepository.getUserByFullName(selectedUser.getFullName()) != null) {
             mapSeat(id, userRepository.getUserByFullName(selectedUser.getFullName()));
-            System.out.println("Registered user is found.");
         }
     }
 

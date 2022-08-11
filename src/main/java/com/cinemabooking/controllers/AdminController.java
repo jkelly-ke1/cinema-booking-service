@@ -8,6 +8,8 @@ import com.cinemabooking.util.EmployeeErrorResponse;
 import com.cinemabooking.util.EmployeeNotFoundException;
 import com.cinemabooking.util.EmployeeValidator;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,11 @@ public class AdminController {
         this.modelMapper = modelMapper;
     }
 
+    Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     @GetMapping("/employee/find/all")
-    public List<Employee> findEmployeeList() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<?> findEmployeeList() {
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @GetMapping("/employee/find/{id}")

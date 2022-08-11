@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Optional<Employee> findEmployeeByUsername(String username);
     void deleteEmployeeById(int id);
-    void deleteEmployeeByUsername(EmployeeDetails ed);
 }
