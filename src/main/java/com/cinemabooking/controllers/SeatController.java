@@ -5,16 +5,14 @@ import com.cinemabooking.dto.SeatDto;
 import com.cinemabooking.models.Seat;
 import com.cinemabooking.models.User;
 import com.cinemabooking.services.SeatService;
-import com.cinemabooking.services.UserService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,18 +34,13 @@ public class SeatController {
         seatService.addSeat(convertFromSeatDto(seatDto));
     }
 
-    // cinema session should be created with client-side parameters
-    //todo: redo user dto
+    // cinema session should be created
+    // with client-side parameters (hall number, max rows, etc.)
     @PostMapping("/new-session")
     public void createBlankCinemaSession(@RequestBody SeatDto seatDto) {
         seatService.makeBlankSeats(convertFromSeatDto(seatDto));
     }
 
-    // return unwrapped seat objects
-    @GetMapping("/find-all-bare")
-    public List<Seat> getAllBareSeats() {
-        return seatService.getAllSeats();
-    }
 
     @GetMapping("/find-all")
     public List<SeatDto> getAllSeats() {

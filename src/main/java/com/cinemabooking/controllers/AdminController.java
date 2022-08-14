@@ -8,8 +8,6 @@ import com.cinemabooking.util.EmployeeErrorResponse;
 import com.cinemabooking.util.EmployeeNotFoundException;
 import com.cinemabooking.util.EmployeeValidator;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -39,7 +36,6 @@ public class AdminController {
         this.modelMapper = modelMapper;
     }
 
-    Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/employee/find/all")
     public ResponseEntity<?> findEmployeeList() {
@@ -49,7 +45,7 @@ public class AdminController {
     @GetMapping("/employee/find/{id}")
     public ResponseEntity<?> findEmployee(@PathVariable int id) {
         if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " is not found.",
+            return new ResponseEntity<>("User by id " + id + " not found.",
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -74,7 +70,7 @@ public class AdminController {
     @DeleteMapping("/employee/{id}/delete")
     public ResponseEntity<?> deleteEmployee(@PathVariable("id") int id) {
         if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " is not found.",
+            return new ResponseEntity<>("User by id " + id + " not found.",
                     HttpStatus.BAD_REQUEST);
         }
         employeeService.deleteEmployee(id);
@@ -85,7 +81,7 @@ public class AdminController {
     public ResponseEntity<?> editEmployee(@PathVariable("id") int id,
                                           @RequestBody EmployeeDto employeeDto) {
         if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " is not found.",
+            return new ResponseEntity<>("User by id " + id + " not found.",
                     HttpStatus.BAD_REQUEST);
         }
 

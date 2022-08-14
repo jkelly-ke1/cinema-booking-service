@@ -1,7 +1,5 @@
 package com.cinemabooking.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -31,7 +29,7 @@ public class Seat {
 
     @Column(name = "assign_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date expirationDate;
+    private Date assignDate;
 
     @Column(name = "session_time")
     private LocalDateTime sessionTime;
@@ -76,12 +74,12 @@ public class Seat {
         this.user = user;
     }
 
-    public Date getExpirationDate() {
-        return expirationDate;
+    public Date getAssignDate() {
+        return assignDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setAssignDate(Date expirationDate) {
+        this.assignDate = expirationDate;
     }
 
     public LocalDateTime getSessionTime() {
@@ -100,7 +98,7 @@ public class Seat {
                 ", place=" + place +
                 ", hallNumber=" + hallNumber +
                 ", user=" + user +
-                ", expirationDate=" + expirationDate +
+                ", assignDate=" + assignDate +
                 '}';
     }
 }

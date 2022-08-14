@@ -80,7 +80,7 @@ public class SeatService {
         seatRepository.findById(id).ifPresent(
                 seat -> {
                     seat.setUser(null);
-                    seat.setExpirationDate(null);
+                    seat.setAssignDate(null);
                 }
         );
     }
@@ -88,16 +88,7 @@ public class SeatService {
     // expiration date should be assigned by user query
     // or already be assigned during the seat creation
     private void enrichSeat(Seat seat) {
-        seat.setExpirationDate(new Date());
-
-        if (userRepository.getUserByFullName(seat.getUser().getFullName()) == null) {
-            userRepository.save(seat.getUser());
-            System.out.println("Cannot find user with name: "
-                    + userRepository.getUserByFullName(seat.getUser().getFullName())
-                    + "Creating new...");
-            seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
-        }
-
+        seat.setAssignDate(new Date());
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));
     }
 
@@ -105,7 +96,7 @@ public class SeatService {
         seatRepository.findById(id).ifPresent(
                 seat -> {
                     seat.setUser(user);
-                    seat.setExpirationDate(new Date());
+                    seat.setAssignDate(new Date());
                 }
         );
     }
