@@ -1,14 +1,17 @@
 package com.cinemabooking.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Entity
+@Getter
+@Setter
 @Table(name = "customer")
 public class User implements Serializable {
 
@@ -28,30 +31,6 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date registeredAt;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Date getRegisteredAt() {
-        return registeredAt;
-    }
-
-    public void setRegisteredAt(Date registeredAt) {
-        this.registeredAt = registeredAt;
-    }
 
     @Override
     public String toString() {

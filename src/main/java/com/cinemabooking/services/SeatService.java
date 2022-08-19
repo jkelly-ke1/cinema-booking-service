@@ -85,8 +85,6 @@ public class SeatService {
         );
     }
 
-    // expiration date should be assigned by user query
-    // or already be assigned during the seat creation
     private void enrichSeat(Seat seat) {
         seat.setAssignDate(new Date());
         seat.setUser(userRepository.getUserByFullName(seat.getUser().getFullName()));

@@ -1,10 +1,15 @@
 package com.cinemabooking.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "seat")
 public class Seat {
 
@@ -13,7 +18,6 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //TODO: add spring-side validation
     @Column(name = "row")
     private int row;
 
@@ -33,62 +37,6 @@ public class Seat {
 
     @Column(name = "session_time")
     private LocalDateTime sessionTime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getPlace() {
-        return place;
-    }
-
-    public void setPlace(int place) {
-        this.place = place;
-    }
-
-    public int getHallNumber() {
-        return hallNumber;
-    }
-
-    public void setHallNumber(int hallNumber) {
-        this.hallNumber = hallNumber;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getAssignDate() {
-        return assignDate;
-    }
-
-    public void setAssignDate(Date expirationDate) {
-        this.assignDate = expirationDate;
-    }
-
-    public LocalDateTime getSessionTime() {
-        return sessionTime;
-    }
-
-    public void setSessionTime(LocalDateTime sessionTime) {
-        this.sessionTime = sessionTime;
-    }
 
     @Override
     public String toString() {

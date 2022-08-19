@@ -1,5 +1,8 @@
 package com.cinemabooking.models;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,8 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Set;
 
-//TODO: add roles
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "role")
 public class Role implements GrantedAuthority{
 
@@ -22,9 +27,6 @@ public class Role implements GrantedAuthority{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Employee> employees;
 
-    public Role() {
-    }
-
     public Role(int id) {
         this.id = id;
     }
@@ -34,46 +36,8 @@ public class Role implements GrantedAuthority{
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
-    }
-
     @Override
     public String getAuthority() {
         return getName();
     }
-
-//    @Override
-//    public String getAuthority() {
-//        return getName();
-//    }
-
-//    @Override
-//    public String toString() {
-//        return "Role{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", employees=" + employees +
-//                '}';
-//    }
 }

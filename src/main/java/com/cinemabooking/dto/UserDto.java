@@ -1,11 +1,13 @@
 package com.cinemabooking.dto;
 
-import com.cinemabooking.models.Seat;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.validation.constraints.*;
-import java.util.List;
 
+@Getter
+@Setter
 public class UserDto {
 
     @Column(name = "full_name")
@@ -14,13 +16,5 @@ public class UserDto {
     @NotBlank(message = "Cannot be blank!")
     @Size(min = 6, max = 40, message = "Name must contain 6 to 40 characters.")
     private String fullName;
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
 }

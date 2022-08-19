@@ -55,13 +55,13 @@ public class AdminController {
     @PostMapping("/employee/add")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDto employeeDto,
                                             BindingResult bindingResult) {
-        Employee employeeToCreate = convertFromEmployeeDto(employeeDto);
-        employeeValidator.validate(employeeToCreate, bindingResult);
-
-        if (!bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Validation error.",
                     HttpStatus.BAD_REQUEST);
         }
+
+        Employee employeeToCreate = convertFromEmployeeDto(employeeDto);
+        employeeValidator.validate(employeeToCreate, bindingResult);
 
         securityService.registerEmployee(employeeToCreate);
         return ResponseEntity.ok("New employee was created.");
