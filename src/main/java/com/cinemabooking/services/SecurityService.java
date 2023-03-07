@@ -34,7 +34,7 @@ public class SecurityService {
 
     @Transactional
     public void updateEmployee(Employee updatedEmployee, int id) {
-        Employee employeeToBeUpdate = employeeRepository.findById(id).get();
+        var employeeToBeUpdate = employeeRepository.findById(id).get();
         employeeToBeUpdate.setUsername(updatedEmployee.getUsername());
         employeeToBeUpdate.setPassword(passwordEncoder.encode(updatedEmployee.getPassword()));
         employeeRepository.save(employeeToBeUpdate);

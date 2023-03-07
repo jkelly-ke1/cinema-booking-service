@@ -59,11 +59,8 @@ public class SeatController {
 
     @GetMapping("/find-by-hall/{hallNumber}")
     public ResponseEntity<?> getSeatsByHall(@PathVariable int hallNumber) {
-
-        if (seatService.getSeatsByHallNumber(hallNumber).isEmpty()) {
-            return new ResponseEntity<>("Hall by number " + hallNumber + " was not found.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (seatService.getSeatsByHallNumber(hallNumber).isEmpty())
+            return new ResponseEntity<>("Hall by number " + hallNumber + " was not found.", HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.ok(seatService.getSeatsByHallNumber(hallNumber));
     }
@@ -71,16 +68,13 @@ public class SeatController {
     @PatchMapping("/{id}/reserve")
     public ResponseEntity<?> reserveSeat(@RequestBody SeatDto seatDto,
                                          @PathVariable("id") int id) {
-
-        if (seatService.getSeatById(id).get().getUser() != null) {
+        if (seatService.getSeatById(id).get().getUser() != null)
             return ResponseEntity.ok("Seat by id: " + id + " is already reserved.");
-        }
 
-        User assignedUser = new User();
+        var assignedUser = new User();
         assignedUser.setFullName(seatDto.getUser().getFullName());
         seatService.assignSeat(id, assignedUser);
         return ResponseEntity.ok("Seat with id: " + id + " was reserved.");
-
     }
 
     @PatchMapping("/{id}/release")

@@ -15,6 +15,6 @@ public class EmployeeValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Employee employee = (Employee) o;
+        var employee = (Employee) o;
     }
 }

@@ -36,30 +36,30 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto,
                                      BindingResult bindingResult) {
-        User userToAdd = convertFromUserDto(userDto);
+        var userToAdd = convertFromUserDto(userDto);
         userValidator.validate(userToAdd, bindingResult);
         userService.addUser(userToAdd);
 
         return ResponseEntity.ok("New user was created.");
     }
 
-    @GetMapping("/get")
+    @GetMapping("/get-all")
     public List<User> getAllUsers() {
         return userService.findAll();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}/get")
     public User getUserById(@PathVariable long id) {
         return userService.getUserById(id);
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping("/{id}/update")
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody @Valid UserDto userDto) {
         userService.updateUser(id, convertFromUserDto(userDto));
         return ResponseEntity.ok("User by id " + id + " was updated.");
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     public void deleteUserById(@PathVariable long id) {
         userService.deleteUser(id);
     }
@@ -70,10 +70,7 @@ public class UserController {
 
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handlerException(UserNotFoundException e) {
-        UserErrorResponse response = new UserErrorResponse(
-                "User with this id was not found.",
-                System.currentTimeMillis()
-        );
+        var response = new UserErrorResponse("User with this id was not found.", System.currentTimeMillis());
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }

@@ -37,17 +37,10 @@ public class UserService {
         return foundUser.orElseThrow(UserNotFoundException::new);
     }
 
-    public User findUserByName(String fullName) {
-        return userRepository.getUserByFullName(fullName);
-    }
 
     @Transactional
     public void updateUser(long id, User updatedUser) {
-        userRepository.getUserById(id).ifPresent(
-                user -> {
-                    user.setFullName(updatedUser.getFullName());
-                }
-        );
+        userRepository.getUserById(id).ifPresent(user -> user.setFullName(updatedUser.getFullName()));
     }
 
     @Transactional

@@ -44,10 +44,8 @@ public class AdminController {
 
     @GetMapping("/employee/find/{id}")
     public ResponseEntity<?> findEmployee(@PathVariable int id) {
-        if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " not found.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (employeeService.getEmployeeById(id).isEmpty())
+            return new ResponseEntity<>("User by id " + id + " not found.", HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
@@ -55,12 +53,10 @@ public class AdminController {
     @PostMapping("/employee/add")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDto employeeDto,
                                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>("Validation error.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (bindingResult.hasErrors())
+            return new ResponseEntity<>("Validation error.", HttpStatus.BAD_REQUEST);
 
-        Employee employeeToCreate = convertFromEmployeeDto(employeeDto);
+        var employeeToCreate = convertFromEmployeeDto(employeeDto);
         employeeValidator.validate(employeeToCreate, bindingResult);
 
         securityService.registerEmployee(employeeToCreate);
@@ -69,10 +65,9 @@ public class AdminController {
 
     @DeleteMapping("/employee/{id}/delete")
     public ResponseEntity<?> deleteEmployee(@PathVariable("id") int id) {
-        if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " not found.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (employeeService.getEmployeeById(id).isEmpty())
+            return new ResponseEntity<>("User by id " + id + " not found.", HttpStatus.BAD_REQUEST);
+
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok("User was deleted.");
     }
@@ -80,26 +75,18 @@ public class AdminController {
     @PatchMapping("/employee/{id}/edit")
     public ResponseEntity<?> editEmployee(@PathVariable("id") int id,
                                           @RequestBody EmployeeDto employeeDto) {
-        if (employeeService.getEmployeeById(id).isEmpty()) {
-            return new ResponseEntity<>("User by id " + id + " not found.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (employeeService.getEmployeeById(id).isEmpty())
+            return new ResponseEntity<>("User by id " + id + " not found.", HttpStatus.BAD_REQUEST);
 
         securityService.updateEmployee(convertFromEmployeeDto(employeeDto), id);
         return ResponseEntity.ok("Employee was edited.");
-
     }
 
     @ExceptionHandler
     private ResponseEntity<EmployeeErrorResponse> handlerExceptions(EmployeeNotFoundException e) {
-        EmployeeErrorResponse response = new EmployeeErrorResponse(
-                "Employee by this id not exist.",
-                System.currentTimeMillis()
-        );
-
+        var response = new EmployeeErrorResponse("Employee by this id not exist.", System.currentTimeMillis());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-
 
     private Employee convertFromEmployeeDto(EmployeeDto employeeDto) {
         return modelMapper.map(employeeDto, Employee.class);

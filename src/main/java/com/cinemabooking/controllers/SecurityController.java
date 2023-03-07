@@ -32,12 +32,10 @@ public class SecurityController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerNewEmployee(@Valid @RequestBody EmployeeDto employeeDto,
                                                  BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>("Validation error.",
-                    HttpStatus.BAD_REQUEST);
-        }
+        if (bindingResult.hasErrors())
+            return new ResponseEntity<>("Validation error.", HttpStatus.BAD_REQUEST);
 
-        Employee employeeToRegister = convertFromEmployeeDto(employeeDto);
+        var employeeToRegister = convertFromEmployeeDto(employeeDto);
         employeeValidator.validate(employeeToRegister, bindingResult);
         securityService.registerEmployee(employeeToRegister);
         return ResponseEntity.ok("New employee was registered!");
