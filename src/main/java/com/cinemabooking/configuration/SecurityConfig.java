@@ -5,6 +5,7 @@ import com.cinemabooking.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,6 +35,9 @@ public class SecurityConfig {
                 .anyRequest().hasAnyRole("EMPLOYEE", "ADMIN")
                 .and()
                 .httpBasic();
+
+        http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(authProvider());
 
         http.cors().disable().csrf().disable();
         http.headers().frameOptions().disable();
